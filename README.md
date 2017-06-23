@@ -1,6 +1,14 @@
-# Browser Selector [![Build status](https://ci.appveyor.com/api/projects/status/github/DanTup/BrowserSelector?svg=true)](https://ci.appveyor.com/project/DanTup/browserselector)
+# This is FORK from DanTup/BrowserSelector
 
-Small utility to launch a different browser depending on the domain of the url being launched.
+This modification is for interactive usage. So every time you click a link in a non-browser a menu is open.
+
+## See menu image below
+
+[![Menu screen](http://i.imgur.com/nkCdv5Q.png)]
+
+# Browser Selector
+
+Small utility to launch a different browser from selection.
 
 > **[Read the blog post about this here](http://blog.dantup.com/2015/09/simple-windows-browser-selector/)**.
 
@@ -99,21 +107,4 @@ Config is a poor mans INI file:
 
 ### Urls
 
-There are two ways to specify an Url. You can use simple wildcards or full regular expressions.
-
-**Simple wildcards:**
-
-	microsoft.com = ie
-	*.microsoft.com = ie
-
-- Only `*` is treated as a special character in URL patterns, and matches any characters (equivalent to the `.*` regex syntax).
-- Only the domain part (or IP address) of a URL is checked.
-- There is no implied wildcard at the start or end, so you must include these if you need them, but be aware that "microsoft.*" will not only match "microsoft.com" and "microsoft.co.uk" but also "microsoft.somethingelse.com".
-
-**Full regular expressions:**
-
-	/sites\.google\.com/a/myproject.live\.com/ = chrome_prof8
-
-- Full regular expressions are specified by wrapping it in /'s.
-- The domain _and_ path are used in the Url comparison.
-- The regular expression syntax is based on the Microsoft .NET implementation.
+In this fork URL matching is removed (for now)
