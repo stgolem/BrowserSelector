@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Security.Principal;
-using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -213,80 +212,59 @@ To open multiple urls at the same time and wait for them, try the following:
 
 		static void LaunchBrowser(string url, bool waitForClose = false)
 		{
-			try
-			{
-				var urlPreferences = ConfigReader.GetUrlPreferences();
-				string _url = url;
-				Uri uri = new Uri(_url);
-				Process p;
+		    //Application.EnableVisualStyles();
+		    //Application.SetCompatibleTextRenderingDefault(false);
+		    
+		    var selector = new Selector.SelectorWindow(url);  
 
-				string pattern;
-				string domain = "", urlPattern;
-
-				foreach (var preference in urlPreferences)
-				{
-					urlPattern = preference.UrlPattern;
-
-					if (urlPattern.StartsWith("/") && urlPattern.EndsWith("/"))
-					{
-						// The domain from the INI file is a regex..
-						domain = uri.Authority + uri.AbsolutePath;
-						pattern = urlPattern.Substring(1, urlPattern.Length - 2);
-					}
-					else
-					{
-						// We're only checking the domain.
-						domain = uri.Authority;
-
-						// Escape the input for regex; the only special character we support is a *
-						var regex = Regex.Escape(urlPattern);
-						// Unescape * as a wildcard.
-						pattern = string.Format("^{0}$", regex.Replace("\\*", ".*"));
-					}
-
-					if (Regex.IsMatch(domain, pattern))
-					{
-						string loc = preference.Browser.Location;
-						if (loc.IndexOf("{url}") > -1)
-						{
-							loc = loc.Replace("{url}", _url);
-							_url = "";
-						}
-						if (loc.StartsWith("\"") && loc.IndexOf('"', 2) > -1)
-						{
-							// Assume the quoted item is the executable, while everything
-							// after (the second quote), is part of the command-line arguments.
-							loc = loc.Substring(1);
-							int pos = loc.IndexOf('"');
-							string args = loc.Substring(pos + 1).Trim();
-							loc = loc.Substring(0, pos).Trim();
-							p = Process.Start(loc, args + " " + _url);
-						}
-						else
-						{
-							// The browser specified in the INI file is a single executable
-							// without any other arguments.
-							// (normal/original behavior)
-							p = Process.Start(loc, _url);
-						}
-
-						if (waitForClose)
-						{
-							p.WaitForExit();
-						}
-
-						return;
-					}
-				}
-
-				MessageBox.Show(string.Format("Unable to find a suitable browser matching {0}.", url), "BrowserSelector", MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(string.Format("Unable to launch browser, sorry :(\r\n\r\nPlease send a copy of this error to DanTup.\r\n\r\n{0}.", ex.ToString()), "BrowserSelector", MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
+		    //Application.Run(selector);
+		    
+		    selector.ShowDialog();
 		}
 
+	    internal static void OpenUrlInBrowser(string url, Browser browser, bool waitForClose = false)
+	    {
+	        try
+	        {
+	            string _url = url;
+	            Uri uri = new Uri(_url);
+	            Process p;
+
+                string loc = browser.Location;
+	            
+	            if (loc.IndexOf("{url}") > -1)
+	            {
+	                loc = loc.Replace("{url}", _url);
+	                _url = "";
+	            }
+	            if (loc.StartsWith("\"") && loc.IndexOf('"', 2) > -1)
+	            {
+	                // Assume the quoted item is the executable, while everything
+	                // after (the second quote), is part of the command-line arguments.
+	                loc = loc.Substring(1);
+	                int pos = loc.IndexOf('"');
+	                string args = loc.Substring(pos + 1).Trim();
+	                loc = loc.Substring(0, pos).Trim();
+	                p = Process.Start(loc, args + " " + _url);
+	            }
+	            else
+	            {
+	                // The browser specified in the INI file is a single executable
+	                // without any other arguments.
+	                // (normal/original behavior)
+	                p = Process.Start(loc, _url);
+	            }
+
+	            if (waitForClose)
+	            {
+	                p.WaitForExit();
+	            }
+	        }
+	        catch (Exception ex)
+	        {
+	            MessageBox.Show(string.Format("Unable to launch browser, sorry :(\r\n\r\nPlease send a copy of this error to DanTup.\r\n\r\n{0}.", ex.ToString()), "BrowserSelector", MessageBoxButtons.OK, MessageBoxIcon.Error);
+	        }
+	    }
 
 		static void CreateSampleSettings()
 		{

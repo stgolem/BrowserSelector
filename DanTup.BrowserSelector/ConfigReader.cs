@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Windows.Forms;
 
 namespace DanTup.BrowserSelector
 {
@@ -15,7 +14,7 @@ namespace DanTup.BrowserSelector
 		/// </summary>
 		public static string ConfigPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "BrowserSelector.ini");
 
-		static internal IEnumerable<UrlPreference> GetUrlPreferences()
+		internal static IEnumerable<UrlPreference> GetUrlPreferences()
 		{
 			if (!File.Exists(ConfigPath))
 				throw new InvalidOperationException(string.Format("The config file was not found:\r\n{0}\r\n", ConfigPath));
@@ -27,10 +26,7 @@ namespace DanTup.BrowserSelector
 				.Where(l => !string.IsNullOrWhiteSpace(l) && !l.StartsWith(";") && !l.StartsWith("#"));
 
 			// Read the browsers section into a dictionary.
-			var browsers = GetConfig(configLines, "browsers")
-				.Select(SplitConfig)
-				.Select(kvp => new Browser { Name = kvp.Key, Location = kvp.Value })
-				.ToDictionary(b => b.Name);
+			var browsers = GetBrowsers(configLines);
 
 			// If there weren't any at all, force IE in there (nobody should create a config file like this!).
 			if (!browsers.Any())
@@ -46,7 +42,25 @@ namespace DanTup.BrowserSelector
 			return urls;
 		}
 
-		static IEnumerable<string> GetConfig(IEnumerable<string> configLines, string configName)
+	    internal static Dictionary<string, Browser> GetBrowsers(IEnumerable<string> configLines = null)
+	    {
+	        if (configLines == null)
+	        {
+	            configLines =
+	                File.ReadAllLines(ConfigPath)
+	                    .Select(l => l.Trim())
+	                    .Where(l => !string.IsNullOrWhiteSpace(l) && !l.StartsWith(";") && !l.StartsWith("#"));
+	        }
+
+	        var browsers = GetConfig(configLines, "browsers")
+	            .Select(SplitConfig)
+	            .Select(kvp => new Browser {Name = kvp.Key, Location = kvp.Value})
+	            .ToDictionary(b => b.Name);
+	        
+	        return browsers;
+	    }
+
+	    static IEnumerable<string> GetConfig(IEnumerable<string> configLines, string configName)
 		{
 			// Read everything from [configName] up to the next [section].
 			return configLines
@@ -122,6 +136,11 @@ namespace DanTup.BrowserSelector
 	{
 		public string Name { get; set; }
 		public string Location { get; set; }
+
+	    public override string ToString()
+	    {
+	        return Name + " | " + Location;
+	    }
 	}
 
 	class UrlPreference
