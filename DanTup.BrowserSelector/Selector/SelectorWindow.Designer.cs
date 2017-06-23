@@ -54,20 +54,21 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.BackColor = System.Drawing.SystemColors.Menu;
-            this.contextMenuStrip1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Underline);
+            this.contextMenuStrip1.Font = new System.Drawing.Font("Segoe UI Semibold", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.contextMenuStrip1.Margin = new System.Windows.Forms.Padding(5);
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.ShowImageMargin = false;
             this.contextMenuStrip1.ShowItemToolTips = false;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(36, 4);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            this.contextMenuStrip1.Text = "Select Browser";
             this.contextMenuStrip1.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip1_Closed);
             this.contextMenuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStrip1_ItemClicked);
             // 
             // SelectorWindow
             // 
             this.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(192F, 192F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(0, 0);
             this.ControlBox = false;

@@ -12,9 +12,17 @@ namespace DanTup.BrowserSelector
 {
 	class Program
 	{
-		static void Main(string[] args)
+	    [System.Runtime.InteropServices.DllImport("user32.dll")]
+	    private static extern bool SetProcessDPIAware();
+
+        static void Main(string[] args)
 		{
-			string arg;
+		    if (Environment.OSVersion.Version.Major >= 6)
+		    {
+		        SetProcessDPIAware();
+		    }
+
+            string arg;
 			bool isOption,
 				waitForClose = false;
 

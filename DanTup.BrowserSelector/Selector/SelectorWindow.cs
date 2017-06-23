@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace DanTup.BrowserSelector.Selector
@@ -14,7 +15,13 @@ namespace DanTup.BrowserSelector.Selector
             InitializeComponent();
             
             listBox1.Items.Clear();
+            contextMenuStrip1.Items.Clear();
+
+            var headFont = new Font(contextMenuStrip1.Font, FontStyle.Bold);
             
+            contextMenuStrip1.Items.Add(new ToolStripLabel("Open url with ...") {ForeColor = Color.Blue, Font = headFont });
+            contextMenuStrip1.Items.Add(new ToolStripSeparator());
+
             var browsers = ConfigReader.GetBrowsers();
             foreach (var browser in browsers)
             {
