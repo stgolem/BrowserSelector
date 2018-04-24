@@ -2,6 +2,8 @@
 
 This modification is for interactive usage. So every time you click a link in a non-browser a menu is open.
 
+[![Go to gitter chat](https://badges.gitter.im/BrowserSelector/Selector.svg)](https://gitter.im/BrowserSelector/Selector?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge)
+
 ## See menu image below
 
 [![Menu screen](http://i.imgur.com/nkCdv5Q.png)]
